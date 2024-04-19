@@ -7,6 +7,7 @@ include \masm32\include\masm32rt.inc
     file_contents dw 512 dup(?)
     butes_read dw ?
     newprice db 256 dup(?), 0
+    newname db 256 dup(?), 0
     
     file_handle3 HANDLE ?
     filename3 db "E:\Restaurant-Mangament-System\file handling\order-history.txt", 0
@@ -24,6 +25,7 @@ include \masm32\include\masm32rt.inc
     butes_read2 db ?
 
     pprompt db 0dh, 0ah, "Enter the new price of the food item: ", 0
+    nprompt db 0dh, 0ah, "Enter the new name of the food item: ", 0
 
     ; first page
     firstpage db 0dh, 0ah, "Welcome to Restaurant Mangement System"
@@ -45,7 +47,7 @@ include \masm32\include\masm32rt.inc
     resMenupg db 0dh, 0ah, "Welcome to Restaurant Admin"
               db  0dh, 0ah, "+-------------------------+"
               db  0dh, 0ah, "| 1. Order History        |"
-              db  0dh, 0ah, "| 2. Replace Food Item    |"
+              db  0dh, 0ah, "| 2. Change Food Item     |"
               db  0dh, 0ah, "| 3. Price Adjustment     |"
               db  0dh, 0ah, "| 4. Exit                 |"
               db  0dh, 0ah, "+-------------------------+"
@@ -230,7 +232,7 @@ resMenu:
     push offset two
     call crt__stricmp
     cmp eax,0
-    je order_his
+    je change_name
 
     push offset reschoosen
     push offset three
@@ -2391,9 +2393,471 @@ p_dt:
     jmp start
 
 pc_ds1:
-pc_ds2:
-pc_ds3:
+    push offset pprompt
+    call StdOut
 
+    push 50
+    push offset newprice
+    call StdIn
+
+    mov esi, offset newprice  
+    mov edi, offset f_desert1p      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+pc_ds2:
+    push offset pprompt
+    call StdOut
+
+    push 50
+    push offset newprice
+    call StdIn
+
+    mov esi, offset newprice  
+    mov edi, offset f_desert2p      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+pc_ds3:
+    push offset pprompt
+    call StdOut
+
+    push 50
+    push offset newprice
+    call StdIn
+
+    mov esi, offset newprice  
+    mov edi, offset f_desert3p      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+
+change_name:
+    push offset orderMenupg
+    call StdOut
+
+    push 50
+    push offset ordchoosen
+    call StdIn
+
+    push offset ordchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je n_st
+
+    push offset ordchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je n_mc
+
+    push offset ordchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je n_br
+
+    push offset ordchoosen
+    push offset four
+    call crt__stricmp
+    cmp eax,0
+    je n_dt
+
+    push offset ordchoosen
+    push offset five
+    call crt__stricmp
+    cmp eax,0
+    je exit_app
+
+    push offset ordchoosen
+    push offset six
+    call crt__stricmp
+    cmp eax,0
+    je ordMenu
+n_st:
+    push offset starterpg
+    call StdOut
+    push offset f_starter1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_starter1p
+    call StdOut
+    push offset f_starter2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_starter2p
+    call StdOut
+    push offset f_starter3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_starter3p
+    call StdOut
+    push offset starer_menu
+    call StdOut
+    push offset choice_s
+    call StdOut
+
+    push 50
+    push offset stchoosen
+    call StdIn
+
+    push offset stchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je nc_st1
+
+    push offset stchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je nc_st2
+
+    push offset stchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je nc_st3
+
+    jmp start
+nc_st1:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_starter1      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_st2:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_starter2      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_st3:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_starter3      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+n_mc:
+    push offset main_coursepg
+    call StdOut
+    push offset f_main1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main1p
+    call StdOut
+    push offset f_main2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main2p
+    call StdOut
+    push offset f_main3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main3p
+    call StdOut
+    push offset starer_menu
+    call StdOut
+    push offset choice_m
+    call StdOut
+
+    push 50
+    push offset mcchoosen
+    call StdIn
+
+    push offset mcchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je nc_mc1
+
+    push offset mcchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je nc_mc2
+
+    push offset mcchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je nc_mc3
+
+    jmp start
+nc_mc1:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_main1      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_mc2:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_main2      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_mc3:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_main3      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+
+n_br:
+    push offset breadpg
+    call StdOut
+    push offset f_bread1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread1p
+    call StdOut
+    push offset f_bread2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread2p
+    call StdOut
+    push offset f_bread3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread3p
+    call StdOut
+    push offset bread_menu
+    call StdOut
+    push offset choice_b
+    call StdOut
+
+    push 50
+    push offset brchoosen
+    call StdIn
+
+    push offset brchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je nc_br1
+
+    push offset brchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je nc_br2
+
+    push offset brchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je nc_br3
+
+    jmp start
+nc_br1:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_bread1      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_br2:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_bread2      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_br3:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_bread3      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+n_dt:
+    push offset desertpg
+    call StdOut
+    push offset f_desert1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert1p
+    call StdOut
+    push offset f_desert2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert2p
+    call StdOut
+    push offset f_desert3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert3p
+    call StdOut
+    push offset desert_menu
+    call StdOut
+    push offset choice_d
+    call StdOut
+
+    push 50
+    push offset dschoosen
+    call StdIn
+
+    push offset dschoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je nc_ds1
+
+    push offset dschoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je nc_ds2
+
+    push offset dschoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je nc_ds3
+
+    jmp start
+nc_ds1:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_desert1      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_ds2:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_desert2      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
+nc_ds3:
+    push offset nprompt
+    call StdOut
+
+    push 50
+    push offset newname
+    call StdIn
+
+    mov esi, offset newname  
+    mov edi, offset f_desert3      
+
+    mov ecx, 50 
+    rep movsb
+
+    jmp resMenu
 exit_app:
 
 end start
