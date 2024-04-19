@@ -35,7 +35,8 @@ include \masm32\include\masm32rt.inc
               db  0dh, 0ah, "| 2. Main Course          |"
               db  0dh, 0ah, "| 3. Bread                |"
               db  0dh, 0ah, "| 4. Desert               |"
-              db  0dh, 0ah, "| 5. Exit                 |"
+              db  0dh, 0ah, "| 5. Complete Order       |"
+              db  0dh, 0ah, "| 6. Exit                 |"
               db  0dh, 0ah, "+-------------------------+"
               db  0dh, 0ah, "Enter Your Option(1-4) >", 0
     ordchoosen   db 50 dup(?)
@@ -48,11 +49,63 @@ include \masm32\include\masm32rt.inc
     f_starter3 db  0dh, 0ah, "| 3. Chicken Tandoori      |", 0
     starer_menu db  0dh, 0ah, "+-------------------------+", 0
     choice_s          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
-    rupees db "Rs ", 0
-    f_starter1p db "100"
-    f_starter2p db "200"
-    f_starter3p db "300"
     stchoosen   db 50 dup(?)
+    qunat_s          db  0dh, 0ah, "Enter Your Quantity >", 0
+    stquant   db 50 dup(?)
+    rupees db "Rs ", 0
+    f_starter1p db "100", 0
+    f_starter2p db "200", 0
+    f_starter3p db "300", 0
+    
+
+    ;main menu
+    main_coursepg   db  0dh, 0ah, "       Main Cousre        "
+               db  0dh, 0ah, "+-------------------------+", 0
+    f_main1 db  0dh, 0ah, "| 1. Dal Makhani           |", 0
+    f_main2 db  0dh, 0ah, "| 2. Paneer Tikka Masala   |", 0
+    f_main3 db  0dh, 0ah, "| 3. Butter Chicken        |", 0
+    main_menu db  0dh, 0ah, "+-------------------------+", 0
+    choice_m          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
+    qunat_m          db  0dh, 0ah, "Enter Your Quantity >", 0
+    mcquant   db 50 dup(?)
+    f_main1p db "300", 0
+    f_main2p db "400", 0
+    f_main3p db "600", 0
+    mcchoosen   db 50 dup(?)
+
+
+    ;Bread menu
+    breadpg    db  0dh, 0ah, "       Breads         "
+               db  0dh, 0ah, "+-------------------------+", 0
+    f_bread1 db  0dh, 0ah, "| 1. Roti                   |", 0
+    f_bread2 db  0dh, 0ah, "| 2. Butter Naan            |", 0
+    f_bread3 db  0dh, 0ah, "| 3. Tandoori Parantha      |", 0
+    bread_menu db  0dh, 0ah, "+-------------------------+", 0
+    choice_b          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
+    qunat_b          db  0dh, 0ah, "Enter Your Quantity >", 0
+    brquant   db 50 dup(?)
+    f_bread1p db "10", 0
+    f_bread2p db "90", 0
+    f_bread3p db "110", 0
+    brchoosen   db 50 dup(?)
+
+    desertpg    db  0dh, 0ah, "        Desert             "
+               db  0dh, 0ah, "+-------------------------+", 0
+    f_desert1 db  0dh, 0ah, "| 1. Lassi                  |", 0
+    f_desert2 db  0dh, 0ah, "| 2. Choco Lava Cake        |", 0
+    f_desert3 db  0dh, 0ah, "| 3. Rasmalai(2pcs)         |", 0
+    desert_menu db  0dh, 0ah, "+-------------------------+", 0
+    choice_d          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
+    qunat_d          db  0dh, 0ah, "Enter Your Quantity >", 0
+    dsquant   db 50 dup(?)
+    f_desert1p db "60", 0
+    f_desert2p db "120", 0
+    f_desert3p db "150", 0
+    dschoosen   db 50 dup(?)
+
+
+    thank db 0dh, 0ah, "Thank You for visiting ICD Restaurant"
+            db 0dh, 0ah, "Have a nice day", 0
 
     one db "1", 0
     two db "2", 0
@@ -175,6 +228,12 @@ ordMenu:
     push offset five
     call crt__stricmp
     cmp eax,0
+    je bill_generation
+
+    push offset ordchoosen
+    push offset six
+    call crt__stricmp
+    cmp eax,0
     je exit_app
 
 starter:
@@ -203,16 +262,141 @@ starter:
     push offset choice_s
     call StdOut
 
+    push 50
+    push offset stchoosen
+    call StdIn
+
+    push offset qunat_s
+    call StdOut
+
+    push 50
+    push offset stquant
+    call StdIn
+
     jmp ordMenu
 
 main_course:
+    push offset main_coursepg
+    call StdOut
+    push offset f_main1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main1p
+    call StdOut
+    push offset f_main2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main2p
+    call StdOut
+    push offset f_main3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_main3p
+    call StdOut
+    push offset starer_menu
+    call StdOut
+    push offset choice_m
+    call StdOut
+
+    push 50
+    push offset mcchoosen
+    call StdIn
+
+    push offset qunat_m
+    call StdOut
+
+    push 50
+    push offset mcquant
+    call StdIn
+
     jmp ordMenu
 
 breads:
+    push offset breadpg
+    call StdOut
+    push offset f_bread1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread1p
+    call StdOut
+    push offset f_bread2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread2p
+    call StdOut
+    push offset f_bread3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_bread3p
+    call StdOut
+    push offset bread_menu
+    call StdOut
+    push offset choice_b
+    call StdOut
+
+    push 50
+    push offset brchoosen
+    call StdIn
+
+    push offset qunat_b
+    call StdOut
+
+    push 50
+    push offset brquant
+    call StdIn
+
     jmp ordMenu
 
 desert: 
+    push offset desertpg
+    call StdOut
+    push offset f_desert1
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert1p
+    call StdOut
+    push offset f_desert2
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert2p
+    call StdOut
+    push offset f_desert3
+    call StdOut
+    push offset rupees
+    call StdOut
+    push offset f_desert3p
+    call StdOut
+    push offset desert_menu
+    call StdOut
+    push offset choice_d
+    call StdOut
+
+    push 50
+    push offset dschoosen
+    call StdIn
+
+    push offset qunat_d
+    call StdOut
+
+    push 50
+    push offset dsquant
+    call StdIn
+
     jmp ordMenu
+
+
+bill_generation:
+    push offset thank
+    call StdOut
+    jmp exit_app
 
 exit_app:
 
