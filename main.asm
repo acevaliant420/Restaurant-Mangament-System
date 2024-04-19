@@ -3,24 +3,24 @@ include \masm32\include\masm32rt.inc
 .data
     bill_write db 0dh, 0ah, "+-------Generated Bill-------+", 0
     file_handle HANDLE ?
-    filename db "E:\Restaurant-Mangament-System\file handling\order-history.txt", 0
+    filename db "E:\Restaurant-Mangament-System\order-history.txt", 0
     file_contents dw 512 dup(?)
     butes_read dw ?
     newprice db 256 dup(?), 0
     newname db 256 dup(?), 0
     
     file_handle3 HANDLE ?
-    filename3 db "E:\Restaurant-Mangament-System\file handling\order-history.txt", 0
+    filename3 db "E:\Restaurant-Mangament-System\order-history.txt", 0
     file_contents3 dw 512 dup(?)
     butes_read3 dw ?
 
     file_handle1 HANDLE ?
-    filename1 db "E:\Restaurant-Mangament-System\file handling\bill.txt", 0
+    filename1 db "E:\Restaurant-Mangament-System\bill.txt", 0
     file_contents1 db 256 dup(?)
     butes_read1 db ?
 
     file_handle2 HANDLE ?
-    filename2 db "E:\Restaurant-Mangament-System\file handling\bill.txt", 0
+    filename2 db "E:\Restaurant-Mangament-System\bill.txt", 0
     file_contents2 db 256 dup(?)
     butes_read2 db ?
 
@@ -581,7 +581,7 @@ bill_generation:
         mov file_handle3, eax
 
     set_file_pointer3:
-        push FILE_END
+        push FILE_BEGIN
         push 0
         push 0
         push file_handle3
