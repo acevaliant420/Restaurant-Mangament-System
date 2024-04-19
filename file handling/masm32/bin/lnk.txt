@@ -1,8 +1,0 @@
- Volume in drive E is New Volume
- Volume Serial Number is 666B-8F5E
-
- Directory of E:\
-
-19-04-2024  00:03           165,593 main.asm
-               1 File(s)        165,593 bytes
-               0 Dir(s)  35,433,521,152 bytes free
