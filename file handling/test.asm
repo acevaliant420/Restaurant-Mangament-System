@@ -1,11 +1,22 @@
 include \masm32\include\masm32rt.inc
 
 .data
-
+    bill_write db 0dh, 0ah, "Your Generated Bill is", 0
     file_handle HANDLE ?
     filename db "E:\Restaurant-Mangament-System\file handling\items.txt", 0
     file_contents db 256 dup(?)
     butes_read db ?
+
+    file_handle1 HANDLE ?
+    filename1 db "E:\Restaurant-Mangament-System\file handling\bill.txt", 0
+    file_contents1 db 256 dup(?)
+    butes_read1 db ?
+
+    file_handle2 HANDLE ?
+    filename2 db "E:\Restaurant-Mangament-System\file handling\bill.txt", 0
+    file_contents2 db 256 dup(?)
+    butes_read2 db ?
+
     ; first page
     firstpage db 0dh, 0ah, "Welcome to Restaurant Mangement System"
               db  0dh, 0ah, "+-------------------------+"
@@ -25,7 +36,7 @@ include \masm32\include\masm32rt.inc
               db  0dh, 0ah, "| 3. Price Adjustment     |"
               db  0dh, 0ah, "| 4. Exit                 |"
               db  0dh, 0ah, "+-------------------------+"
-              db  0dh, 0ah, "Enter Your Option(1-3) >", 0
+              db  0dh, 0ah, "Enter Your Option(1-4) >", 0
     reschoosen   db 50 dup(?)
 
     ; OrderMenu page
@@ -38,15 +49,15 @@ include \masm32\include\masm32rt.inc
               db  0dh, 0ah, "| 5. Complete Order       |"
               db  0dh, 0ah, "| 6. Exit                 |"
               db  0dh, 0ah, "+-------------------------+"
-              db  0dh, 0ah, "Enter Your Option(1-4) >", 0
+              db  0dh, 0ah, "Enter Your Option(1-6) >", 0
     ordchoosen   db 50 dup(?)
 
     ;starter menu
     starterpg   db  0dh, 0ah, "         Starters          "
-              db  0dh, 0ah, "+-------------------------+", 0
-    f_starter1 db  0dh, 0ah, "| 1. Malai Chaap           |", 0
-    f_starter2 db  0dh, 0ah, "| 2. Paneer Tikka          |", 0
-    f_starter3 db  0dh, 0ah, "| 3. Chicken Tandoori      |", 0
+              db  0dh, 0ah, "+ -------------------------+", 0
+    f_starter1 db  0dh, 0ah, "|  Malai Chaap           |", 0
+    f_starter2 db  0dh, 0ah, "|  Paneer Tikka          |", 0
+    f_starter3 db  0dh, 0ah, "|  Chicken Tandoori      |", 0
     starer_menu db  0dh, 0ah, "+-------------------------+", 0
     choice_s          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
     stchoosen   db 50 dup(?)
@@ -61,9 +72,9 @@ include \masm32\include\masm32rt.inc
     ;main menu
     main_coursepg   db  0dh, 0ah, "       Main Cousre        "
                db  0dh, 0ah, "+-------------------------+", 0
-    f_main1 db  0dh, 0ah, "| 1. Dal Makhani           |", 0
-    f_main2 db  0dh, 0ah, "| 2. Paneer Tikka Masala   |", 0
-    f_main3 db  0dh, 0ah, "| 3. Butter Chicken        |", 0
+    f_main1 db  0dh, 0ah, "|    Dal Makhani           |", 0
+    f_main2 db  0dh, 0ah, "|    Paneer Tikka Masala   |", 0
+    f_main3 db  0dh, 0ah, "|    Butter Chicken        |", 0
     main_menu db  0dh, 0ah, "+-------------------------+", 0
     choice_m          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
     qunat_m          db  0dh, 0ah, "Enter Your Quantity >", 0
@@ -77,9 +88,9 @@ include \masm32\include\masm32rt.inc
     ;Bread menu
     breadpg    db  0dh, 0ah, "       Breads         "
                db  0dh, 0ah, "+-------------------------+", 0
-    f_bread1 db  0dh, 0ah, "| 1. Roti                   |", 0
-    f_bread2 db  0dh, 0ah, "| 2. Butter Naan            |", 0
-    f_bread3 db  0dh, 0ah, "| 3. Tandoori Parantha      |", 0
+    f_bread1 db  0dh, 0ah, "|    Roti                   |", 0
+    f_bread2 db  0dh, 0ah, "|    Butter Naan            |", 0
+    f_bread3 db  0dh, 0ah, "|    Tandoori Parantha      |", 0
     bread_menu db  0dh, 0ah, "+-------------------------+", 0
     choice_b          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
     qunat_b          db  0dh, 0ah, "Enter Your Quantity >", 0
@@ -91,9 +102,9 @@ include \masm32\include\masm32rt.inc
 
     desertpg    db  0dh, 0ah, "        Desert             "
                db  0dh, 0ah, "+-------------------------+", 0
-    f_desert1 db  0dh, 0ah, "| 1. Lassi                  |", 0
-    f_desert2 db  0dh, 0ah, "| 2. Choco Lava Cake        |", 0
-    f_desert3 db  0dh, 0ah, "| 3. Rasmalai(2pcs)         |", 0
+    f_desert1 db  0dh, 0ah, "|    Lassi                  |", 0
+    f_desert2 db  0dh, 0ah, "|    Choco Lava Cake        |", 0
+    f_desert3 db  0dh, 0ah, "|    Rasmalai(2pcs)         |", 0
     desert_menu db  0dh, 0ah, "+-------------------------+", 0
     choice_d          db  0dh, 0ah, "Enter Your Option(1-3) >", 0
     qunat_d          db  0dh, 0ah, "Enter Your Quantity >", 0
@@ -133,8 +144,38 @@ start:
         call CreateFileA
         mov file_handle, eax
     
+    create_file1:
+        push 0
+        push FILE_ATTRIBUTE_NORMAL
+        push OPEN_EXISTING
+        push 0
+        push 0
+        push FILE_SHARE_WRITE
+        push offset filename1
+        call CreateFileA
+        mov file_handle1, eax
+
+    set_file_pointer:
+        push FILE_END
+        push 0
+        push 0
+        push file_handle1
+        call SetFilePointer
+    
+    push offset bill_write
+    call lstrlen
+
+    push 0
+    push 0
+    push eax
+    push offset bill_write
+    push file_handle1
+    call WriteFile
     push offset firstpage
     call StdOut
+
+
+    
 
     push 50
     push offset choosen
@@ -193,6 +234,8 @@ order_his:
     jmp resMenu
 
 ordMenu:
+
+
     push offset orderMenupg
     call StdOut
 
@@ -273,6 +316,24 @@ starter:
     push offset stquant
     call StdIn
 
+    push offset stchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je st1
+
+    push offset stchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je st2
+
+    push offset stchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je st3
+
     jmp ordMenu
 
 main_course:
@@ -311,6 +372,24 @@ main_course:
     push 50
     push offset mcquant
     call StdIn
+
+    push offset mcchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je mc1
+
+    push offset mcchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je mc2
+
+    push offset mcchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je mc3
 
     jmp ordMenu
 
@@ -351,6 +430,24 @@ breads:
     push offset brquant
     call StdIn
 
+    push offset brchoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je br1
+
+    push offset brchoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je br2
+
+    push offset brchoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je br3
+
     jmp ordMenu
 
 desert: 
@@ -390,14 +487,356 @@ desert:
     push offset dsquant
     call StdIn
 
+    push offset dschoosen
+    push offset one
+    call crt__stricmp
+    cmp eax,0
+    je ds1
+
+    push offset dschoosen
+    push offset two
+    call crt__stricmp
+    cmp eax,0
+    je ds2
+
+    push offset dschoosen
+    push offset three
+    call crt__stricmp
+    cmp eax,0
+    je ds3
+
     jmp ordMenu
 
 
 bill_generation:
-    push offset thank
-    call StdOut
+    push file_handle1
+    call CloseHandle
+    create_file2:
+        push 0
+        push FILE_ATTRIBUTE_NORMAL
+        push OPEN_EXISTING
+        push 0
+        push 0
+        push FILE_READ_DATA
+        push offset filename2
+        call CreateFileA
+        mov file_handle2, eax
+    read_file1:
+        push 0
+        push offset butes_read2
+        push 256
+        push offset file_contents2
+        push file_handle2
+        call ReadFile
+    invoke StdOut, offset file_contents2
     jmp exit_app
 
+st1:
+    write_txt_file:
+        
+
+        push offset f_starter1
+        call lstrlen
+
+        push 0 
+        push 0
+        push eax
+        push offset f_starter1
+        push file_handle1
+        call WriteFile
+
+        push offset stquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset stquant
+        push file_handle1
+        call WriteFile
+
+
+    jmp ordMenu
+st2:
+    write_txt_file2:
+        
+
+        push offset f_starter2
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_starter2
+        push file_handle1
+        call WriteFile
+
+        push offset stquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset stquant
+        push file_handle1
+        call WriteFile
+
+    jmp ordMenu
+st3:
+    write_txt_file3:
+
+        
+
+        push offset f_starter3
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_starter3
+        push file_handle1
+        call WriteFile
+
+        push offset stquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset stquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+
+mc1:
+
+        
+
+        push offset f_main1
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_main1
+        push file_handle1
+        call WriteFile
+
+        push offset mcquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset mcquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+mc2:
+    
+
+        
+
+        push offset f_main2
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_main2
+        push file_handle1
+        call WriteFile
+
+        push offset mcquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset mcquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+mc3:
+
+        
+
+        push offset f_main3
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_main3
+        push file_handle1
+        call WriteFile
+
+        push offset mcquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset mcquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+
+br1:
+
+        
+
+        push offset f_bread1
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_bread1
+        push file_handle1
+        call WriteFile
+
+        push offset brquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset brquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+br2:
+
+        
+
+        push offset f_bread2
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_bread2
+        push file_handle1
+        call WriteFile
+
+        push offset brquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset brquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+br3:
+
+        
+
+        push offset f_bread3
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_bread3
+        push file_handle1
+        call WriteFile
+
+        push offset brquant
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset brquant
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+
+ds1:
+
+        
+
+        push offset f_desert1
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_desert1
+        push file_handle1
+        call WriteFile
+
+        push offset dschoosen
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset dschoosen
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+ds2:
+
+        
+
+        push offset f_desert2
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_desert2
+        push file_handle1
+        call WriteFile
+
+        push offset dschoosen
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset dschoosen
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
+ds3:
+
+        
+
+        push offset f_desert3
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset f_desert3
+        push file_handle1
+        call WriteFile
+
+        push offset dschoosen
+        call lstrlen
+
+        push 0
+        push 0
+        push eax
+        push offset dschoosen
+        push file_handle1
+        call WriteFile
+        
+    jmp ordMenu
 exit_app:
 
 end start
