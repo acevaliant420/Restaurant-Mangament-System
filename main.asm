@@ -8,6 +8,7 @@ include \masm32\include\masm32rt.inc
     butes_read dw ?
     newprice db 256 dup(?), 0
     newname db 256 dup(?), 0
+    total_price db 256 dup(?), 0
     
     file_handle3 HANDLE ?
     filename3 db "E:\Restaurant-Mangament-System\order-history.txt", 0
@@ -38,7 +39,7 @@ include \masm32\include\masm32rt.inc
 
     re1 db 0dh, 0ah, "Redirecting to you to admin page ......", 0
 
-
+    t_price db 0dh, 0ah, "Total Price: Rs ", 0
     strin db " x", 0    
     endl db 0dh, 0ah, "+----------------------------+", 0
     neworder db 0dh, 0ah, "********************************************************", 0
@@ -581,7 +582,7 @@ bill_generation:
         mov file_handle3, eax
 
     set_file_pointer3:
-        push FILE_BEGIN
+        push FILE_END
         push 0
         push 0
         push file_handle3
