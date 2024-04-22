@@ -1,6 +1,7 @@
 include \masm32\include\masm32rt.inc
 
 .data
+    out_ofstock db 0dh, 0ah, "Out of Stock Please Choose Again", 0
     bill_write db 0dh, 0ah, "+-------Generated Bill-------+", 0
     file_handle HANDLE ?
     filename db "E:\Restaurant-Mangament-System\order-history.txt", 0
@@ -84,8 +85,8 @@ include \masm32\include\masm32rt.inc
     f_starter2p db "150", 0
     f_starter3p db "200", 0
     var_st1 db "2", 0
-    var_st2 db "4", 0
-    var_st3 db "6", 0
+    var_st2 db "3", 0
+    var_st3 db "4", 0
     
     
 
@@ -104,8 +105,8 @@ include \masm32\include\masm32rt.inc
     f_main3p db "400", 0
     mcchoosen   db 50 dup(?)
     var_mc1 db "6", 0
-    var_mc2 db "8", 0
-    var_mc3 db "10", 0
+    var_mc2 db "7", 0
+    var_mc3 db "8", 0
 
     ;Bread menu
     breadpg    db  0dh, 0ah, "       Breads         "
@@ -702,6 +703,10 @@ st1:
     call crt__stricmp
     cmp eax,0
     je set10
+
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
 st2:
     write_txt_file2:
         
@@ -788,6 +793,9 @@ st2:
     call crt__stricmp
     cmp eax,0
     je set15
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
 st3:
     write_txt_file3:
     
@@ -875,7 +883,9 @@ st3:
     call crt__stricmp
     cmp eax,0
     je set20
-
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
 mc1:
 
         
@@ -948,7 +958,9 @@ mc1:
     call crt__stricmp
     cmp eax,0
     je set18
-
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
     
 mc2:
     
@@ -1023,6 +1035,9 @@ mc2:
     call crt__stricmp
     cmp eax,0
     je set21
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
 mc3:
 
         
@@ -1097,6 +1112,9 @@ mc3:
     call crt__stricmp
     cmp eax,0
     je set24
+    push offset out_ofstock
+    call StdOut
+    jmp ordMenu
 
 br1:
 
